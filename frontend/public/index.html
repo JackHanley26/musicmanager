@@ -1,0 +1,138 @@
+<!-- index.html -->
+<!doctype html>
+<html>
+<head>
+
+    <title>My Music Player</title>
+
+
+    <!--If running in container-->
+    <!--<base href="./app">-->
+
+    <!--If running local -->
+    <base href="./">
+
+    <!-- THIRD PARTY CSS -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+    <link rel="stylesheet" href="/app/bower_components/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/app/bower_components/angular-material/angular-material.min.css">
+    <link rel="stylesheet" href="/app/bower_components/angular/angular-csp.css"/>
+    <link rel="stylesheet" href="/app/bower_components/angular-bootstrap/ui-bootstrap-csp.css"/>
+    <link rel="stylesheet" href="/app/bower_components/font-awesome/css/font-awesome.css"/>
+
+    <!-- CUSTOM CSS -->
+    <link rel="stylesheet" href="/app/public/css/app.css">
+
+    <!-- BOWER COMPONENTS -->
+    <script src="/app/bower_components/jquery/dist/jquery.js"></script>
+    <script src="/app/bower_components/angular/angular.min.js"></script>
+    <script src="/app/bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
+    <script src="/app/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="/app/bower_components/angular-ui-router/release/angular-ui-router.js"></script>
+    <script src="/app/bower_components/angular-aria/angular-aria.min.js"></script>
+    <script src="/app/bower_components/angular-material/angular-material.js"></script>
+    <script src="/app/bower_components/angular-animate/angular-animate.js"></script>
+    <script src="/app/bower_components/angular-soundmanager2/dist/angular-soundmanager2.min.js"></script>
+    <script src="/app/bower_components/angular-messages/angular-messages.min.js"></script>
+    <script src="/app/node_modules/angular-cookies/angular-cookies.min.js"></script>
+
+
+    <!-- ROUTER -->
+    <script src="/app/public/js/app.js"></script>
+
+
+    <!-- SOUND CLOUD -->
+    <script src="https://connect.soundcloud.com/sdk/sdk-3.1.2.js"></script>
+    <script>
+        SC.initialize({
+            client_id: 'YOUR_CLIENT_ID',
+            redirect_uri: 'http://example.com/callback'
+        });
+
+        // initiate auth popup
+        SC.connect().then(function() {
+            return SC.get('/me');
+        }).then(function(me) {
+            alert('Hello, ' + me.username);
+        });
+    </script>
+
+
+</head>
+<body ng-app="myapp">
+
+<!-- init soundManager2 player -->
+<sound-manager></sound-manager>
+<!--CONTROLLERS-->
+<script src="/app/public/js/controllers/main.controller.js"></script>
+<script src="/app/public/js/controllers/home.controller.js"></script>
+<script src="/app/public/js/controllers/collection.controller.js"></script>
+<script src="/app/public/js/controllers/explore.controller.js"></script>
+<script src="/app/public/js/controllers/profile.controller.js"></script>
+<script src="/app/public/js/controllers/signin.controller.js"></script>
+
+<!--SERVICES-->
+<script src="/app/public/js/services/backoffService.js"></script>
+<script src="/app/public/js/services/restservice.js"></script>
+<script src="/app/public/js/services/music.service.js"></script>
+
+
+<div ng-cloak ng-controller="MainController">
+    <md-content class="md-padding" style="padding-bottom: 0px">
+        <md-nav-bar md-selected-nav-item="currentNavItem" nav-bar-aria-label="navigation links">
+            <md-nav-item md-nav-click="goto('home')" name="home" selected="true" ng-click="goto('home')">Home
+            </md-nav-item>
+            <md-nav-item md-nav-click="goto('collection')" name="collection" ng-click="goto('collection')">Collection
+            </md-nav-item>
+            <md-nav-item md-nav-click="goto('explore')" name="explore" ng-click="goto('explore')">Explore</md-nav-item>
+            <md-nav-item md-nav-click="goto('profile')" name="profile" ng-click="goto('profile')">Profile</md-nav-item>
+            <md-button ng-show="user" md-nav-click="goto('logout')" name="logout" ng-click="logout()" style="float: right">Logout</md-button>
+
+        </md-nav-bar>
+        <div class="ext-content" ui-view style="overflow: auto;"
+             ng-style="currentPlaying && {'height' :'calc(100vh - 128px)'} || {'height' :'calc(100vh - 65px)'}"
+        >
+        </div>
+    </md-content>
+
+    <footer ng-show="currentPlaying" id="player">
+        <md-toolbar class="md-scroll-shrink">
+            <div layout="row" layout-align="center center" flex>
+                <div class="col-md-4">
+
+                    <i style="cursor: pointer" class="material-icons" play-music>play_arrow</i>
+
+                    <i style="cursor: pointer" class="material-icons" pause-music>pause</i>
+
+                    <i style="cursor: pointer" class="material-icons" stop-music>stop</i>
+
+                </div>
+                <div class="col-md-4">
+                    <div ng-show="currentPlaying">
+                        {{ currentPlaying.title }} - {{ currentPlaying.artist }} ({{ currentPostion }} / {{
+                        currentDuration}})
+                    </div>
+                </div>
+                <div class="col-md-4">
+
+
+                    <md-slider-container>
+                        <span></span>
+                        <md-slider flex min="0" max="100" ng-model="color.red" aria-label="red" id="volumn-slider">
+                        </md-slider>
+                        <md-input-container>
+                            <input flex type="number" ng-model="color.red" aria-label="red"
+                                   aria-controls="volumn-slider">
+                        </md-input-container>
+                    </md-slider-container>
+
+                </div>
+
+            </div>
+        </md-toolbar>
+    </footer>
+
+</div>
+</body>
+</html>

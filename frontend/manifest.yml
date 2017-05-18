@@ -1,0 +1,10 @@
+---
+applications:
+- name: mymusicplayer
+  host: mymusicplayer
+  memory: 256M
+  instances: 1
+  command: node app.js
+  domain: mybluemix.net
+  disk_quota: 1024M
+  path: .

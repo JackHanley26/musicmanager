@@ -1,0 +1,20 @@
+{
+  "name": "application-name",
+  "version": "0.0.1",
+  "private": true,
+  "dependencies": {
+    "body-parser": "^1.0.2",
+    "bunyan": "^1.8.10",
+    "cloudant": "^1.7.1",
+    "cors": "^2.8.3",
+    "error-handler": "^0.1.4",
+    "express": "^4.15.2",
+    "lodash": "^4.17.4",
+    "method-override": "^1.0.0",
+    "nano": "^6.2.0",
+    "requests": "^0.1.7"
+  },
+  "scripts": {
+    "start": "node app.js"
+  }
+}

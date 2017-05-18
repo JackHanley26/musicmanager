@@ -1,0 +1,58 @@
+version: '2.0'
+services:
+  weba:
+    build: ./frontend
+    ports:
+        - "3001:3001"
+    environment:
+        - PORT=3001
+    expose:
+        - 3001
+    depends_on:
+        - dba
+        - dbb
+#  webb:
+#     build: ./frontend
+#     environment:
+#         - PORT=80
+#     expose:
+#         - 80
+#     depends_on:
+#          - dba
+#          - dbb
+#  webc:
+#     build: ./frontend
+#     environment:
+#         - PORT=80
+#     expose:
+#         - 80
+#     depends_on:
+#          - dba
+#          - dbb
+  dba:
+   build: ./cloudant
+   environment:
+       - DATABASE=music
+       - PORT=4001
+   ports:
+        - "4001:4001"
+  dbb:
+   build: ./cloudant
+   environment:
+          - DATABASE=users
+          - PORT=4002
+   ports:
+        - "4002:4002"
+#  haproxy:
+#    image: tutum/haproxy:latest
+#    links:
+#     - weba
+#     - webb
+#     - webc
+#    ports:
+#     - "80:80"
+#     - "70:70"
+#
+#    expose:
+#     - "80"
+#     - "70"
