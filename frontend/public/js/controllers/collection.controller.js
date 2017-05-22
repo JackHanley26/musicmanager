@@ -1,43 +1,42 @@
-angular.module("myapp").controller("CollectionController", function ($rootScope, $scope, $stateParams, $state) {
+angular.module("myapp").controller("CollectionController", function ($rootScope, $scope, $stateParams, $state, $mdToast, $log, UserService) {
 
 
-  if(!$rootScope.user){
+  if (!$rootScope.user) {
     $state.go("signin")
   }
 
-
-  $scope.songs = [
-    {
-      id: 'one',
-      title: 'Rain',
-      artist: 'Drake',
-      url: 'http://www.schillmania.com/projects/soundmanager2/demo/_mp3/rain.mp3'
-    },
-    {
-      id: 'two',
-      title: 'Walking',
-      artist: 'Nicki Minaj',
-      url: 'http://www.schillmania.com/projects/soundmanager2/demo/_mp3/walking.mp3'
-    },
-    {
-      id: 'three',
-      title: 'Barrlping with Carl (featureblend.com)',
-      artist: 'Akon',
-      url: 'http://www.freshly-ground.com/misc/music/carl-3-barlp.mp3'
-    },
-    {
-      id: 'four',
-      title: 'Angry cow sound?',
-      artist: 'A Cow',
-      url: 'http://www.freshly-ground.com/data/audio/binaural/Mak.mp3'
-    },
-    {
-      id: 'five',
-      title: 'Things that open, close and roll',
-      artist: 'Someone',
-      url: 'http://www.freshly-ground.com/data/audio/binaural/Things%20that%20open,%20close%20and%20roll.mp3'
+  UserService.getUserCollection($rootScope.user).then(function (result) {
+    if (result.data) {
+      $scope.songs = result.data;
+    } else {
+      showCustomToast("You have no songs in your collection");
     }
-  ];
+  }, function (err) {
+    showCustomToast("Error: " + err);
+    $log.error(err);
+  });
 
+  $scope.removeFromCollection = function (song) {
+    var user = $rootScope.user;
+    UserService.removeFromCollection(user, song).then(function (result) {
+      if (result.data.removed) {
+        showCustomToast("Song removed from collection!");
+        $scope.songs = result.data.songs;
+      }
+    }, function (err) {
+      showCustomToast("Error: "+err);
+    });
+  };
+
+
+  function showCustomToast(msg) {
+    $mdToast.show({
+      hideDelay: 3000,
+      position: 'top right',
+      controller: 'WarningToastCtrl',
+      locals: {msg: msg},
+      templateUrl: '/app/public/views/toast.html'
+    });
+  };
 
 });

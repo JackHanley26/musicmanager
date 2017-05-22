@@ -1,13 +1,12 @@
 (function () {
   'use strict';
 
-  /*eslint-env browser*/
 
   var ApiService = function ($rootScope, $http, $q, $timeout, $log, $window, backoffService) {
     var hardTimeout = 15 * 1000;
 
-    var URL = "http://localhost:4001";
-
+    //client can provide the full url
+    var URL = "";
 
     var that = this;
     this._cancelAllCancellables = $q.defer();

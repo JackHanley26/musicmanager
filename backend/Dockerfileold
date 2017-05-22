@@ -5,10 +5,11 @@ ADD . /app
 
 # Install dependencies
 RUN cd /app; \
-     npm install
+    npm install
 
 # Expose our server port.
-EXPOSE 4001
+EXPOSE 5000
+
 
 # Run our app.
-CMD ["node", "/app/app.js"]  
+CMD ["node", "/app/app.js"]

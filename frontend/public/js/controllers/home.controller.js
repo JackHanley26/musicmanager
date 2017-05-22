@@ -1,5 +1,10 @@
+angular.module('myapp')
+  .controller('WarningToastCtrl', ['$scope', 'msg', function ($scope, msg) {
+    $scope.msg = msg;
+  }]);
+
 angular.module("myapp")
-  .controller("HomeController", function ($rootScope, $scope, $stateParams, $state, MusicService, $log) {
+  .controller("HomeController", function ($rootScope, $scope, $stateParams, $state, MusicService, $log, UserService, $mdToast) {
 
 
     if (!$rootScope.user) {
@@ -9,57 +14,40 @@ angular.module("myapp")
 
     MusicService.getMusic().then(function (result) {
       if (result)
-        result.data[0].id = "one";
-      $scope.songs = result.data;
+        $scope.songs = result.data;
 
     }, function (err) {
       $log.error(err);
     });
 
-    $scope.addToCollection = function (user, song) {
+    $scope.addToCollection = function (song) {
+
+      var user = $rootScope.user;
+
+
+      UserService.addToCollection(user, song).then(function (result) {
+        if (result.data.inserted) {
+          showCustomToast("Song added to collection!");
+        } else if (result.data.existed) {
+          showCustomToast("Song already in collection!");
+        }
+      }, function (err) {
+        showCustomToast();
+      });
+
 
     };
 
-    SC.initialize({
-      client_id: "YOUR-CLIENT-ID-HERE"
-    });
 
-    SC.get("/groups/55517/tracks", {
-      limit: 5
-    }, function(tracks) {
-      for (var i = 0; i < tracks.length; i ++) {
-        SC.stream( '/tracks/' + tracks[i].id, function( sm_object ){
-          var track = {
-            id: tracks[i].id,
-            title: tracks[i].title,
-            artist: tracks[i].genre,
-            url: sm_object.url
-          };
-
-          $scope.$apply(function () {
-            $scope.songs.push(track);
-          });
-        });
-      }
-    });
-
-
-
-    /*$scope.songs = [
-     {
-     id: 'one',
-     title: 'Rain',
-     artist: 'Drake',
-     url: 'http://www.schillmania.com/projects/soundmanager2/demo/_mp3/rain.mp3'
-     },
-     {
-     id: 'one',
-     title: 'Rise Again (Original Mix)',
-     artist: 'Boston 168',
-     artwork: 'public/images/boston-168.jpg',
-     url: 'public/files/01 303 Regiment.mp3'
-     }
-     ]*/
-
+    function showCustomToast(msg) {
+      $scope.msg = msg;
+      $mdToast.show({
+        hideDelay: 3000,
+        position: 'top right',
+        controller: 'WarningToastCtrl',
+        locals: {msg: msg},
+        templateUrl: '/app/public/views/toast.html'
+      });
+    };
 
   });

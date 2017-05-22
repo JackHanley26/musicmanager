@@ -4,6 +4,10 @@ var path = require('path');
 
 app.use(express.static('./'));
 
+app.get('/secretendpointname/apiurl', function (req, res) {
+  res.send(process.env.APIURL);
+});
+
 app.get('/', function (req, res) {
   var options = {
     root: __dirname + '/public',
@@ -20,7 +24,7 @@ app.get('/', function (req, res) {
     }
   });
 });
-var port = process.env.PORT = 3001;
+var port = process.env.PORT ||  3001;
 
 app.listen(port, "0.0.0.0");
 

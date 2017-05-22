@@ -3,11 +3,15 @@ angular.module('myapp').controller("MainController", function ($scope, $state, $
 
   function loadUserFromCookies() {
     var user = $cookies.get('musicplayerlogin');
+    var pass = $cookies.get('musicplayerpassword');
+    var userObj = {
+      username: user,
+      password: pass
+    };
     if (user) {
-      $rootScope.user = user;
+      $rootScope.user = userObj;
       $scope.userloggedin = true;
     }
-
   }
 
   loadUserFromCookies();
@@ -17,11 +21,15 @@ angular.module('myapp').controller("MainController", function ($scope, $state, $
   };
 
   $scope.logout = function () {
+
     if ($rootScope.user) {
       delete $rootScope.user;
       $cookies.remove("musicplayerlogin");
       $state.go('home');
       $state.reload();
+    }
+    if ($scope.currentPlaying) {
+      $scope.currentPlaying = null;
     }
   }
 

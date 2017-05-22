@@ -42,23 +42,6 @@
     <script src="/app/public/js/app.js"></script>
 
 
-    <!-- SOUND CLOUD -->
-    <script src="https://connect.soundcloud.com/sdk/sdk-3.1.2.js"></script>
-    <script>
-        SC.initialize({
-            client_id: 'YOUR_CLIENT_ID',
-            redirect_uri: 'http://example.com/callback'
-        });
-
-        // initiate auth popup
-        SC.connect().then(function() {
-            return SC.get('/me');
-        }).then(function(me) {
-            alert('Hello, ' + me.username);
-        });
-    </script>
-
-
 </head>
 <body ng-app="myapp">
 
@@ -76,6 +59,7 @@
 <script src="/app/public/js/services/backoffService.js"></script>
 <script src="/app/public/js/services/restservice.js"></script>
 <script src="/app/public/js/services/music.service.js"></script>
+<script src="/app/public/js/services/user.service.js"></script>
 
 
 <div ng-cloak ng-controller="MainController">
@@ -87,7 +71,9 @@
             </md-nav-item>
             <md-nav-item md-nav-click="goto('explore')" name="explore" ng-click="goto('explore')">Explore</md-nav-item>
             <md-nav-item md-nav-click="goto('profile')" name="profile" ng-click="goto('profile')">Profile</md-nav-item>
-            <md-button ng-show="user" md-nav-click="goto('logout')" name="logout" ng-click="logout()" style="float: right">Logout</md-button>
+            <md-button ng-show="user" md-nav-click="goto('logout')" name="logout" ng-click="logout()" stop-music
+                       style="float: right">Logout
+            </md-button>
 
         </md-nav-bar>
         <div class="ext-content" ui-view style="overflow: auto;"
@@ -110,14 +96,14 @@
                 </div>
                 <div class="col-md-4">
                     <div ng-show="currentPlaying">
-                        {{ currentPlaying.title }} - {{ currentPlaying.artist }} ({{ currentPostion }} / {{
+                        {{ currentPlaying.artist }} - {{ currentPlaying.title }} ({{ currentPostion }} / {{
                         currentDuration}})
                     </div>
                 </div>
                 <div class="col-md-4">
 
 
-                    <md-slider-container>
+                   <!-- <md-slider-container>
                         <span></span>
                         <md-slider flex min="0" max="100" ng-model="color.red" aria-label="red" id="volumn-slider">
                         </md-slider>
@@ -125,7 +111,7 @@
                             <input flex type="number" ng-model="color.red" aria-label="red"
                                    aria-controls="volumn-slider">
                         </md-input-container>
-                    </md-slider-container>
+                    </md-slider-container>-->
 
                 </div>
 
